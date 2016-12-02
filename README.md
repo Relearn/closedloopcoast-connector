@@ -7,7 +7,7 @@ Run `npm install`
 
 ### using
 Run `node index.js`  
-On a headless Linux device you probably want to send the app to background when starting it. In this case run `screen node index.js`
+On a headless Linux device you probably want to send the app to background when starting it. In this case run `screen node index.js`. If you want the app to start automatically when computer starts, use the provided script in file `onboot.sh`.
 
 ### configuring
 Most configuration is done in this mongo database: https://mlab.com/databases/closedloopconfig
