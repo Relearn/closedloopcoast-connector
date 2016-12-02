@@ -58,7 +58,7 @@ function SNMPInstance(config) {
         } else { 
 
           var v = varbinds[i];
-          var u = varbinds[~~(i / l) * l + _this.config.unit];
+          var u = l<=1 ? {value: "c"} : varbinds[~~(i / l) * l + _this.config.unit];
 
           if(snmp.isVarbindError(v)) {
             utils.error(snmp.varbindError(v));

@@ -37,10 +37,7 @@ if (cluster.isWorker) {
   var lowPassFilter = null;
 
   var sources = [];
-  var status = {"generic":{}};
-
-
-
+  var status = {"type":"status", "generic":{}};
 
   var configs = new MongoInstance(CONFIG_DB_URL);
   configs.connect((db) => {
