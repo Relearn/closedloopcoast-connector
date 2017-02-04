@@ -11,6 +11,7 @@ var networkInterfaces  = require('os').networkInterfaces();
 const DATA_DB_URL = 'mongodb://writer:icanwrite@ds049624.mlab.com:49624/domesensors';
 const CONFIG_DB_URL = "mongodb://reader:icanread@ds143777.mlab.com:43777/closedloopconfig";
 
+//default configs that may later be overwritten from db
 var DATE_TIME_FORMAT = "yymmdd-HH:MM:ss";
 var PERIOD = 1000*2;
 var PERIOD_HISTORY_MINOR = 1000;
@@ -27,6 +28,7 @@ if (cluster.isMaster) {
 
 if (cluster.isWorker) {
 
+  //attempt to identify a unique deviceID with device mac addresses
   var mac = [];
   for(let key in networkInterfaces){
     mac = mac.concat(networkInterfaces[key].filter((f)=> f.family == "IPv4" && !f.internal).map((m)=>m.mac))
@@ -41,6 +43,8 @@ if (cluster.isWorker) {
 
   var configs = new MongoInstance(CONFIG_DB_URL);
   configs.connect((db) => {
+    
+    //get collections from a database asynchronously
     var cfgPromises = [  
       db.collection('data_sources').find({}).toArray(),
       db.collection('data_processing').find({}).toArray(),
@@ -90,13 +94,13 @@ if (cluster.isWorker) {
       
       if(!lastUpdateMajorTime || (time > lastUpdateMajorTime + PERIOD_HISTORY_MAJOR)){
         majorUpdate = true;
-        lastUpdateMajorTime = (new Date(time)).valueOf();
+        lastUpdateMajorTime = time;
       }else{
         majorUpdate = false;
       }      
       if(!lastUpdateMinorTime || (time > lastUpdateMinorTime + PERIOD_HISTORY_MINOR)){
         minorUpdate = true;
-        lastUpdateMinorTime = (new Date(time)).valueOf();
+        lastUpdateMinorTime = time;
       }else{
         minorUpdate = false;
       }

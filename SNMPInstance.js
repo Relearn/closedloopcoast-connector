@@ -75,11 +75,14 @@ function SNMPInstance(config) {
       }); 
 
       if(cb) cb(result);
-      if(!error && _this.config.probeTypes.indexOf(2)!==-1) _this.switchUnit()
+      //if(!error && _this.config.probeTypes.indexOf(2)!==-1) _this.switchUnit()
     });
   }
   
-  
+  // switch the probe unit between temperature and humidity
+  // by immitating the web interface that would normally do that
+  // neither SNMP nor Modbus implementations on the sensor give functionality of modifying configs
+  // Modbus implementation doesn't even have the capability of reading the current unit
   this.switchUnit = function(cb){
     var _this = this;
     
